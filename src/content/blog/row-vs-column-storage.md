@@ -6,7 +6,7 @@ tags: ["databases", "ClickHouse", "system design"]
 draft: false
 ---
 
-Every database stores data on disk. The fundamental question is *how* — and the answer determines whether your analytical query takes 50 milliseconds or 50 seconds.
+Most databases store data on disk. The fundamental question is *how* — and the answer determines whether your analytical query takes 50 milliseconds or 50 seconds.
 
 ## The row store model
 
