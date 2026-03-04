@@ -5,12 +5,18 @@ import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
-  const tags = [...new Set(posts.flatMap((post) => post.data.tags.map((t) => t.toLowerCase().replace(/\s+/g, '-'))))];
 
-  return tags.map((tag) => ({
+  // Build slug → original tag name map (preserves casing like "ClickHouse")
+  const tagMap = new Map<string, string>();
+  posts.flatMap((post) => post.data.tags).forEach((t) => {
+    const slug = t.toLowerCase().replace(/\s+/g, '-');
+    if (!tagMap.has(slug)) tagMap.set(slug, t);
+  });
+
+  return [...tagMap.keys()].map((tag) => ({
     params: { tag },
     props: {
-      tag,
+      displayTag: tagMap.get(tag)!,
       posts: posts
         .filter((post) => post.data.tags.map((t) => t.toLowerCase().replace(/\s+/g, '-')).includes(tag) && !post.data.draft)
         .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()),
@@ -18,8 +24,7 @@ export async function getStaticPaths() {
   }));
 }
 
-const { tag, posts } = Astro.props;
-const displayTag = tag.split('-').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+const { displayTag, posts } = Astro.props;
 ---
 <BaseLayout title={`${displayTag} — orekhov.work`} description={`Posts tagged with ${displayTag}`}>
   <div class="tag-page">
