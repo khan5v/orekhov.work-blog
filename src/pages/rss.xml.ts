@@ -11,6 +11,7 @@ export async function GET(context: APIContext) {
     title: 'orekhov.work',
     description: 'Deep dives into distributed systems, database internals, and infrastructure.',
     site: context.site!,
+    customData: '<language>en</language>',
     items: posts.map((post) => ({
       title: post.data.title,
       pubDate: post.data.date,

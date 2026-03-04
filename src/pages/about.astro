@@ -1,7 +1,19 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Vladimir Orekhov',
+  url: 'https://orekhov.work/about/',
+  jobTitle: 'Software Engineer',
+  worksFor: { '@type': 'Organization', name: 'Meta' },
+  address: { '@type': 'PostalAddress', addressLocality: 'Zurich', addressCountry: 'CH' },
+  sameAs: ['https://www.linkedin.com/in/orekhov/'],
+};
 ---
-<BaseLayout title="About — Vladimir Orekhov" description="Software engineer in Zurich. 10+ years at Meta, Google, Booking.com. Writing about how systems actually work.">
+<BaseLayout title="About — Vladimir Orekhov" description="Software engineer in Zurich with 10+ years at Meta, Google, and Booking.com. Writing practical deep dives into databases, distributed systems, and infrastructure.">
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   <div class="about">
     <div class="label">About</div>
     <h1>Hey, I'm Vladimir Orekhov.</h1>
@@ -26,7 +38,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       <h2>Connect</h2>
       <div class="links">
-        <a href="https://www.linkedin.com/in/orekhov/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.linkedin.com/in/orekhov/" target="_blank" rel="noopener me">LinkedIn</a>
         <a href="mailto:hello@orekhov.work">Email</a>
       </div>
     </div>

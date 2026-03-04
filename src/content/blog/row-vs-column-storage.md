@@ -1,7 +1,7 @@
 ---
 title: "How columnar storage actually works (and why ClickHouse is fast)"
 date: 2026-03-04
-description: "Why ClickHouse queries billions of rows in milliseconds — columnar storage, compression, and SIMD vectorization explained from first principles."
+description: "Why ClickHouse queries billions of rows in milliseconds — columnar storage, compression, and the MergeTree engine explained from first principles."
 tags: ["databases", "ClickHouse", "system design"]
 draft: false
 ---
@@ -48,17 +48,11 @@ Columnar storage unlocks compression ratios that row stores can't touch. When al
 
 Row-based storage tries to compress mixed types (string, float, int, string...) — compressors can't find patterns. Typical: 2-4x. Columnar: **10-50x**.
 
-In ClickHouse, `LowCardinality(String)` explicitly tells the engine to use dictionary encoding. Use it for columns with few distinct values: event_type, region, device_type.
-
-## SIMD vectorization
-
-When a column's data is stored contiguously as an array of identical types, modern CPUs can process it using SIMD instructions — operating on 8, 16, or even 32 values simultaneously in a single cycle.
-
-ClickHouse processes data in blocks of 8,192 rows, applying operations across entire vectors rather than row-by-row. Scanning `gpu_temp.bin` is just a contiguous Float32 array — the CPU chews through it with SIMD. Row-based storage scatters floats between strings and ints, killing cache locality and any chance of vectorization.
+In ClickHouse, [`LowCardinality(String)`](https://clickhouse.com/docs/en/sql-reference/data-types/lowcardinality) explicitly tells the engine to use dictionary encoding. Use it for columns with few distinct values: event_type, region, device_type.
 
 ## How ClickHouse organizes data on disk
 
-Columnar layout explains the read path, but ClickHouse also needs to *write* fast — it ingests millions of rows per second. This is where the MergeTree engine comes in.
+Columnar layout explains the read path, but ClickHouse also needs to *write* fast — it ingests millions of rows per second. This is where the [MergeTree engine](https://clickhouse.com/docs/en/engines/table-engines/mergetree-family/mergetree) comes in.
 
 Data arrives in **parts**: each insert creates a new immutable directory on disk containing one file per column, pre-sorted by the primary key. Background merges periodically combine smaller parts into larger ones — similar to LSM trees in LevelDB or RocksDB.
 
@@ -69,6 +63,14 @@ The primary key isn't a unique constraint. It's a **sort order**. If you define 
 2. **Sort order drives compression.** Sorted data means identical `device_id` values sit next to each other — run-length encoding kicks in. Timestamps within a device are sequential — delta encoding kicks in. The choice of `ORDER BY` directly determines how compressible your data is.
 
 Getting `ORDER BY` right is the single most impactful decision when designing a ClickHouse table. Wrong sort order means full scans and poor compression. Right sort order means your queries touch 1% of the data.
+
+## The tradeoff: updates and deletes
+
+Columnar storage optimizes for reads at the cost of mutations. Updating a single field in a row store means rewriting one block. In a column store, that same update touches every column file for that row — and in ClickHouse, `ALTER TABLE UPDATE` isn't an in-place operation. It rewrites entire parts in the background, which can take minutes on large tables and spike I/O.
+
+Deletes work the same way. ClickHouse marks rows as deleted and physically removes them during the next merge. Until then, every query still filters out the dead rows at read time.
+
+This is why ClickHouse isn't a good fit for workloads that need frequent row-level mutations — user profiles, shopping carts, anything transactional. It's built for append-heavy, read-heavy patterns: logs, events, telemetry, analytics. If you find yourself writing `ALTER TABLE UPDATE` regularly, you're fighting the storage engine.
 
 ## When to use which
 

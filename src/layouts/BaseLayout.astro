@@ -5,23 +5,28 @@ interface Props {
   title: string;
   description?: string;
   ogImage?: string;
+  ogType?: string;
   canonicalURL?: string;
 }
 
 const {
   title,
-  description = 'Deep dives into distributed systems, database internals, and infrastructure.',
+  description = 'Deep dives into distributed systems, database internals, and infrastructure — how things actually work under the hood.',
   ogImage,
+  ogType = 'website',
   canonicalURL = Astro.url.href,
 } = Astro.props;
 
 const siteName = 'orekhov';
+const defaultOgImage = new URL('/og-default.png', Astro.site).href;
+const resolvedOgImage = ogImage || defaultOgImage;
 ---
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <title>{title}</title>
   <meta name="description" content={description} />
   <link rel="canonical" href={canonicalURL} />
@@ -29,22 +34,25 @@ const siteName = 'orekhov';
   <link rel="alternate" type="application/rss+xml" title={siteName} href="/rss.xml" />
 
   <!-- Open Graph -->
-  <meta property="og:type" content="website" />
+  <meta property="og:type" content={ogType} />
   <meta property="og:url" content={canonicalURL} />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
-  {ogImage && <meta property="og:image" content={ogImage} />}
+  <meta property="og:image" content={resolvedOgImage} />
+  <meta property="og:site_name" content="orekhov.work" />
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
-  {ogImage && <meta name="twitter:image" content={ogImage} />}
+  <meta name="twitter:image" content={resolvedOgImage} />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <slot name="head" />
 
   <!-- Prevent flash of wrong theme -->
   <script is:inline>
@@ -68,7 +76,7 @@ const siteName = 'orekhov';
 
   <slot />
 
-  <footer>&copy; {new Date().getFullYear()} &middot; Written with coffee and regret</footer>
+  <footer>&copy; {new Date().getFullYear()} &middot; {['Reviewed by exactly one person','Works on my machine','Written with coffee and regret','Eventually consistent','Uptime: mostly'][Math.floor(Math.random() * 5)]}</footer>
 </body>
 </html>
 
