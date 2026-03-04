@@ -15,6 +15,7 @@ const jsonLd = {
 <BaseLayout title="About — Vladimir Orekhov" description="Software engineer in Zurich with 10+ years at Meta, Google, and Booking.com. Writing practical deep dives into databases, distributed systems, and infrastructure.">
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   <div class="about">
+    <a href="/" class="back">&larr; All posts</a>
     <div class="label">About</div>
     <h1>Hey, I'm Vladimir Orekhov.</h1>
 
@@ -51,6 +52,20 @@ const jsonLd = {
     margin: 0 auto;
     padding: 3.5rem 1.5rem 4rem;
   }
+
+  .back {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--accent);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 2.5rem;
+    transition: opacity 0.15s;
+  }
+
+  .back:hover { opacity: 0.7; }
 
   .label {
     font-size: 0.75rem;

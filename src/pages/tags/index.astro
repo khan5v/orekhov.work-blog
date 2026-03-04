@@ -1,0 +1,129 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog')).filter((post) => !post.data.draft);
+
+// Build tag → { displayName, count } map
+const tagMap = new Map<string, { display: string; count: number }>();
+for (const post of posts) {
+  for (const tag of post.data.tags) {
+    const slug = tag.toLowerCase().replace(/\s+/g, '-');
+    const existing = tagMap.get(slug);
+    if (existing) {
+      existing.count++;
+    } else {
+      tagMap.set(slug, { display: tag, count: 1 });
+    }
+  }
+}
+
+// Sort by count descending, then alphabetically
+const tags = [...tagMap.entries()].sort((a, b) => b[1].count - a[1].count || a[1].display.localeCompare(b[1].display));
+---
+<BaseLayout title="Tags — orekhov.work" description="Browse all topics — distributed systems, database internals, infrastructure, and more.">
+  <div class="tags-page">
+    <a href="/" class="back">&larr; All posts</a>
+    <div class="label">Browse</div>
+    <h1>Tags</h1>
+    <p class="count">{tags.length} {tags.length === 1 ? 'topic' : 'topics'}</p>
+
+    <ul class="tag-list">
+      {tags.map(([slug, { display, count }]) => (
+        <li>
+          <a href={`/tags/${slug}/`}>
+            <span class="tag-name">{display}</span>
+            <span class="tag-count">{count}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</BaseLayout>
+
+<style>
+  .tags-page {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 3.5rem 1.5rem 4rem;
+  }
+
+  .back {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--accent);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 2.5rem;
+    transition: opacity 0.15s;
+  }
+
+  .back:hover { opacity: 0.7; }
+
+  .label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.5rem;
+  }
+
+  .count {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+  }
+
+  .tag-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tag-list li {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .tag-list li:first-child {
+    border-top: 2px solid var(--text);
+  }
+
+  .tag-list a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+
+  .tag-name {
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--text);
+    transition: color 0.15s;
+  }
+
+  .tag-list a:hover .tag-name { color: var(--accent); }
+
+  .tag-count {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (max-width: 640px) {
+    .tags-page { padding: 2rem 1rem 3rem; }
+    h1 { font-size: 1.9rem; }
+  }
+</style>

@@ -5,9 +5,10 @@ interface Props {
   description: string;
   tags: string[];
   slug: string;
+  readingTime?: number;
 }
 
-const { title, date, description, tags, slug } = Astro.props;
+const { title, date, description, tags, slug, readingTime } = Astro.props;
 
 const formatted = date.toLocaleDateString('en-US', {
   year: 'numeric',
@@ -16,7 +17,10 @@ const formatted = date.toLocaleDateString('en-US', {
 });
 ---
 <div class="post-item">
-  <time class="post-date" datetime={date.toISOString()}>{formatted}</time>
+  <div class="post-date-col">
+    <time class="post-date" datetime={date.toISOString()}>{formatted}</time>
+    {readingTime && <span class="post-reading-time">{readingTime} min</span>}
+  </div>
   <div class="post-content">
     <h3><a href={`/posts/${slug}/`}>{title}</a></h3>
     <p class="post-desc">{description}</p>

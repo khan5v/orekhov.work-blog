@@ -1,0 +1,99 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Page not found — orekhov.work" description="The page you're looking for doesn't exist.">
+  <div class="not-found">
+    <div class="label">404</div>
+    <h1>Page not found</h1>
+
+    <pre class="stacktrace"><code><span class="err">Traceback (most recent call last):</span>
+  File "<span class="path">router.py</span>", line 42, in <span class="fn">resolve</span>
+    page = pages[request.path]
+           ~~~~~<span class="err">^^^^^^^^^^^^^^</span>
+<span class="err">KeyError</span>: '<span class="path">/whatever-you-just-typed</span>'
+
+<span class="dim">During handling, another exception occurred:</span>
+  <span class="err">AuthorError</span>: <span class="dim">moved things and told nobody</span></code></pre>
+
+    <a href="/" class="back">&larr; Back to posts</a>
+  </div>
+</BaseLayout>
+
+<style>
+  .not-found {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 5rem 1.5rem;
+    text-align: center;
+  }
+
+  .label {
+    font-size: 5rem;
+    font-weight: 800;
+    color: var(--border);
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+  }
+
+  .stacktrace {
+    text-align: left;
+    display: inline-block;
+    font-family: 'JetBrains Mono Variable', monospace;
+    font-size: 0.8rem;
+    line-height: 1.7;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 2rem;
+    overflow-x: auto;
+    max-width: 100%;
+  }
+
+  .stacktrace code {
+    font-family: inherit;
+  }
+
+  .stacktrace .err {
+    color: #EF4444;
+    font-weight: 500;
+  }
+
+  .stacktrace .path {
+    color: var(--accent);
+  }
+
+  .stacktrace .dim {
+    color: var(--text-secondary);
+  }
+
+  .stacktrace .fn {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .back {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--accent);
+    text-decoration: none;
+    transition: opacity 0.15s;
+  }
+
+  .back:hover { opacity: 0.7; }
+
+  @media (max-width: 640px) {
+    .not-found { padding: 3rem 1rem; }
+    .label { font-size: 3.5rem; }
+    h1 { font-size: 1.6rem; }
+    .stacktrace { font-size: 0.7rem; padding: 1rem; }
+  }
+</style>

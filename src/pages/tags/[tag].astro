@@ -42,6 +42,7 @@ const { displayTag, posts } = Astro.props;
         description={post.data.description}
         tags={post.data.tags}
         slug={post.id}
+        readingTime={Math.max(1, Math.ceil((post.body?.split(/\s+/).length ?? 0) / 250))}
       />
     ))}
   </div>
