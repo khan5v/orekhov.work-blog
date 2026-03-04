@@ -7,7 +7,7 @@ const posts = (await getCollection('blog'))
   .filter((post) => !post.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
-<BaseLayout title="orekhov.work — Engineering Blog" description="Practical deep dives into database internals, distributed systems, and infrastructure — ClickHouse, PostgreSQL, and production systems explained from first principles.">
+<BaseLayout title="orekhov.work — Engineering Blog" description="Practical deep dives into database internals, distributed systems, and infrastructure — how things actually work under the hood, explained from first principles.">
   <div class="hero">
     <div class="label">Engineering Blog</div>
     <h1>Building systems<br />that survive<br />production.</h1>
