@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog'))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+<BaseLayout title="orekhov.work — Engineering Blog">
+  <div class="hero">
+    <div class="label">Engineering Blog</div>
+    <h1>Building systems<br />that survive<br />production.</h1>
+    <p>Deep dives into distributed systems, database internals, and the infrastructure that powers real-world software at scale.</p>
+  </div>
+
+  <div class="posts">
+    <div class="posts-header">
+      <h2>Recent Posts</h2>
+      <span>{posts.length} {posts.length === 1 ? 'article' : 'articles'}</span>
+    </div>
+
+    {posts.map((post) => (
+      <PostCard
+        title={post.data.title}
+        date={post.data.date}
+        description={post.data.description}
+        tags={post.data.tags}
+        slug={post.id}
+      />
+    ))}
+  </div>
+</BaseLayout>
+
+<style>
+  .hero {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 4rem 1.5rem 3rem;
+  }
+
+  .hero .label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .hero h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.035em;
+    margin-bottom: 1rem;
+  }
+
+  .hero p {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    max-width: 520px;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 640px) {
+    .hero { padding: 2.5rem 1rem 2rem; }
+    .hero h1 { font-size: 2.2rem; }
+  }
+</style>

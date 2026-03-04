@@ -1,0 +1,101 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="About — Vladimir Orekhov" description="Software engineer in Zurich. 10+ years at Meta, Google, Booking.com. Writing about how systems actually work.">
+  <div class="about">
+    <div class="label">About</div>
+    <h1>Hey, I'm Vladimir Orekhov.</h1>
+
+    <div class="about-body">
+      <p>
+        Software engineer based in Zurich. Last 10+ years I've been building
+        infrastructure at Meta, Google, and Booking.com — recording tooling for XR devices,
+        data validation platforms, factory calibration pipelines, testing frameworks. Mostly
+        the kind of stuff that pages you when it breaks.
+      </p>
+
+      <h2>Why this blog</h2>
+
+      <p>
+        I kept looking up how things actually work — databases, distributed systems, data
+        pipelines — and most of what's out there is either too shallow to learn from or too
+        academic to apply. I wanted something practical: here's how it works, here's why it
+        matters, here's where it breaks. That's what I try to write. Short reads, no filler,
+        just enough depth to actually be useful.
+      </p>
+
+      <h2>Connect</h2>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/orekhov/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="mailto:hello@orekhov.work">Email</a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .about {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 3.5rem 1.5rem 4rem;
+  }
+
+  .label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    margin-bottom: 2rem;
+  }
+
+  .about-body {
+    font-size: 1.05rem;
+    line-height: 1.75;
+  }
+
+  .about-body p {
+    margin-bottom: 1.5rem;
+  }
+
+  .about-body h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .links {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .links a {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.15s;
+  }
+
+  .links a:hover {
+    border-bottom-color: var(--accent);
+  }
+
+  @media (max-width: 640px) {
+    .about { padding: 2rem 1rem 3rem; }
+    h1 { font-size: 1.9rem; }
+    .about-body { font-size: 1rem; }
+  }
+</style>

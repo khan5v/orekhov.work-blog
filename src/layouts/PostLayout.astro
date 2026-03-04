@@ -1,0 +1,221 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  date: Date;
+  description: string;
+  tags: string[];
+  readingTime: number;
+}
+
+const { title, date, description, tags, readingTime } = Astro.props;
+
+const formatted = date.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  description,
+  datePublished: date.toISOString(),
+  author: {
+    '@type': 'Person',
+    name: 'Vladimir Orekhov',
+  },
+};
+---
+<BaseLayout title={`${title} — orekhov.work`} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <article>
+    <div class="article-header">
+      <a href="/" class="back">&larr; All posts</a>
+      <div class="label">
+        {tags.map((tag, i) => (
+          <a href={`/tags/${tag.toLowerCase().replace(/\s+/g, '-')}/`} class="label-link">{tag}{i < tags.length - 1 ? ' · ' : ''}</a>
+        ))}
+      </div>
+      <h1>{title}</h1>
+      <div class="article-meta">
+        <time datetime={date.toISOString()}>{formatted}</time> &middot; {readingTime} min read
+      </div>
+    </div>
+
+    <div class="article-body">
+      <slot />
+    </div>
+  </article>
+
+
+</BaseLayout>
+
+<style is:global>
+  /* --- ARTICLE HEADER --- */
+  .article-header {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 3.5rem 1.5rem 0;
+  }
+
+  .article-header .back {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--accent);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 2.5rem;
+    transition: opacity 0.15s;
+  }
+
+  .article-header .back:hover { opacity: 0.7; }
+
+  .article-header .label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  .article-header .label-link {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .article-header .label-link:hover {
+    text-decoration: underline;
+  }
+
+  .article-header h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+  }
+
+  .article-meta {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    padding-bottom: 2rem;
+    margin-bottom: 2.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* --- ARTICLE BODY --- */
+  .article-body {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 1.5rem 4rem;
+    font-size: 1.05rem;
+    line-height: 1.75;
+  }
+
+  .article-body p {
+    margin-bottom: 1.15rem;
+  }
+
+  .article-body h2 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-top: 1.85rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .article-body h3 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .article-body blockquote {
+    background: var(--accent-subtle);
+    border-left: 3px solid var(--accent);
+    padding: 1rem 1.25rem;
+    margin: 1.5rem 0;
+    border-radius: 0 8px 8px 0;
+    color: var(--text);
+    font-size: 0.95rem;
+  }
+
+  .article-body pre {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', 'SF Mono', 'Consolas', monospace;
+    font-size: 0.82rem;
+    line-height: 1.65;
+    margin: 1.5rem 0;
+  }
+
+  .article-body code {
+    font-family: 'JetBrains Mono', 'SF Mono', 'Consolas', monospace;
+    font-size: 0.85em;
+    background: var(--bg-surface);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+
+  .article-body pre code {
+    background: none;
+    padding: 0;
+    border: none;
+    font-size: inherit;
+  }
+
+  .article-body strong {
+    font-weight: 600;
+  }
+
+  .article-body ul, .article-body ol {
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+  }
+
+  .article-body li {
+    margin-bottom: 0.5rem;
+  }
+
+  .article-body a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .article-body a:hover {
+    opacity: 0.8;
+  }
+
+  .article-body img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+  }
+
+  .article-body hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 2rem 0;
+  }
+
+  /* --- RESPONSIVE --- */
+  @media (max-width: 640px) {
+    .article-header { padding: 2rem 1rem 0; }
+    .article-header h1 { font-size: 1.9rem; }
+    .article-body { padding: 0 1rem 3rem; font-size: 1rem; }
+    .article-body pre { padding: 1rem; font-size: 0.75rem; }
+  }
+</style>
