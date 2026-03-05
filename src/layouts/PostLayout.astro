@@ -171,7 +171,7 @@ const jsonLd = {
   }
 
   .article-body pre {
-    background: var(--bg-surface);
+    background: var(--bg-surface) !important;
     border: 1px solid var(--border);
     border-radius: 8px;
     padding: 1.25rem 1.5rem;
@@ -180,6 +180,13 @@ const jsonLd = {
     font-size: 0.82rem;
     line-height: 1.65;
     margin: 1.5rem 0;
+  }
+
+  /* Shiki dual-theme: switch to dark tokens when data-theme="dark" */
+  [data-theme="dark"] .astro-code,
+  [data-theme="dark"] .astro-code span {
+    color: var(--shiki-dark) !important;
+    background-color: var(--shiki-dark-bg) !important;
   }
 
   .article-body code {
@@ -258,6 +265,8 @@ const jsonLd = {
   .article-body tbody tr:last-child td {
     border-bottom: none;
   }
+
+
 
   @media (max-width: 640px) {
     .article-body table {
