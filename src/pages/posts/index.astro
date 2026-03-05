@@ -1,0 +1,91 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog'))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const grouped = posts.reduce((acc, post) => {
+  const year = post.data.date.getFullYear().toString();
+  (acc[year] ??= []).push(post);
+  return acc;
+}, {} as Record<string, typeof posts>);
+
+const years = Object.keys(grouped).sort((a, b) => Number(b) - Number(a));
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://orekhov.work' },
+    { '@type': 'ListItem', position: 2, name: 'Posts', item: 'https://orekhov.work/posts/' },
+  ],
+};
+---
+<BaseLayout title="All posts — orekhov.work" description="All articles on orekhov.work — databases, distributed systems, AI evaluation, and infrastructure.">
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
+  <div class="archive">
+    <h1 class="label">All posts</h1>
+    <p class="count">{posts.length} {posts.length === 1 ? 'article' : 'articles'}</p>
+
+    {years.map((year) => (
+      <section>
+        <h2 class="year-heading">{year}</h2>
+        {grouped[year].map((post) => (
+          <PostCard
+            title={post.data.title}
+            date={post.data.date}
+            description={post.data.description}
+            tags={post.data.tags}
+            slug={post.id}
+            readingTime={Math.max(1, Math.ceil((post.body?.split(/\s+/).length ?? 0) / 250))}
+          />
+        ))}
+      </section>
+    ))}
+  </div>
+</BaseLayout>
+
+<style>
+  .archive {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 3.5rem 1.5rem 4rem;
+  }
+
+  .label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+  }
+
+  .count {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 2.5rem;
+  }
+
+  .year-heading {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    letter-spacing: -0.01em;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  section:first-of-type .year-heading {
+    margin-top: 0;
+  }
+
+  @media (max-width: 640px) {
+    .archive { padding: 2rem 1rem 3rem; }
+  }
+</style>

@@ -34,6 +34,9 @@ const isActive = (href: string) =>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#1C1C1C" media="(prefers-color-scheme: dark)" />
   <title>{title}</title>
   <meta name="description" content={description} />
   <link rel="canonical" href={canonicalURL} />
@@ -73,7 +76,7 @@ const isActive = (href: string) =>
   <nav>
     <a href="/" class="logo">{siteName}<span class="logo-dot"></span></a>
     <div class="nav-right">
-      <a href="/" class:list={[{ active: isActive('/') }]}>Posts</a>
+      <a href="/posts/" class:list={[{ active: isActive('/posts/') }]}>Posts</a>
       <a href="/tags/" class:list={[{ active: isActive('/tags/') }]}>Tags</a>
       <a href="/about/" class:list={[{ active: isActive('/about/') }]}>About</a>
       <ThemeToggle />
@@ -291,7 +294,6 @@ const isActive = (href: string) =>
     max-width: var(--max-width);
     margin: 0 auto;
     padding: 2rem 1.5rem;
-    border-top: 1px solid var(--border);
     font-size: 0.8rem;
     color: var(--text-secondary);
     text-align: center;

@@ -25,10 +25,20 @@ export async function getStaticPaths() {
 }
 
 const { displayTag, posts } = Astro.props;
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://orekhov.work' },
+    { '@type': 'ListItem', position: 2, name: 'Tags', item: 'https://orekhov.work/tags/' },
+    { '@type': 'ListItem', position: 3, name: displayTag, item: Astro.url.href },
+  ],
+};
 ---
 <BaseLayout title={`${displayTag} — orekhov.work`} description={`Articles about ${displayTag} — deep dives into how things actually work, explained from first principles.`}>
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
   <div class="tag-page">
-    <a href="/" class="back">&larr; All posts</a>
     <div class="label">Tag</div>
     <h1>{displayTag}</h1>
     <p class="count">{posts.length} {posts.length === 1 ? 'article' : 'articles'}</p>
@@ -54,20 +64,6 @@ const { displayTag, posts } = Astro.props;
     margin: 0 auto;
     padding: 3.5rem 1.5rem 2rem;
   }
-
-  .back {
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: var(--accent);
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    margin-bottom: 2.5rem;
-    transition: opacity 0.15s;
-  }
-
-  .back:hover { opacity: 0.7; }
 
   .label {
     font-size: 0.75rem;

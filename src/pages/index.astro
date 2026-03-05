@@ -3,11 +3,29 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
 import { getCollection } from 'astro:content';
 
-const posts = (await getCollection('blog'))
+const allPosts = (await getCollection('blog'))
   .filter((post) => !post.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const posts = allPosts.slice(0, 5);
+const hasMore = allPosts.length > 5;
+
+const websiteLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'orekhov.work',
+  url: 'https://orekhov.work',
+  description: 'Engineering blog containing practical deep dives into databases, distributed systems, and infrastructure — explained from first principles.',
+  author: {
+    '@type': 'Person',
+    name: 'Vladimir Orekhov',
+    url: 'https://orekhov.work/about/',
+    sameAs: ['https://www.linkedin.com/in/orekhov/'],
+  },
+};
 ---
 <BaseLayout title="orekhov.work — Engineering Blog" description="Practical deep dives into database internals, distributed systems, and infrastructure — how things actually work under the hood, explained from first principles.">
+  <script type="application/ld+json" set:html={JSON.stringify(websiteLd)} />
   <div class="hero">
     <div class="label">Engineering Blog</div>
     <h1>Building systems<br />that survive<br />production.</h1>
@@ -16,8 +34,7 @@ const posts = (await getCollection('blog'))
 
   <div class="posts">
     <div class="posts-header">
-      <h2>Recent Posts</h2>
-      <span>{posts.length} {posts.length === 1 ? 'article' : 'articles'}</span>
+      <h2>Recent posts</h2>
     </div>
 
     {posts.map((post) => (
@@ -30,6 +47,10 @@ const posts = (await getCollection('blog'))
         readingTime={Math.max(1, Math.ceil((post.body?.split(/\s+/).length ?? 0) / 250))}
       />
     ))}
+
+    {hasMore && (
+      <a href="/posts/" class="view-all">View all {allPosts.length} posts &rarr;</a>
+    )}
   </div>
 </BaseLayout>
 
@@ -63,6 +84,19 @@ const posts = (await getCollection('blog'))
     max-width: 520px;
     line-height: 1.6;
   }
+
+  .view-all {
+    display: block;
+    text-align: center;
+    padding: 1.5rem 0;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--accent);
+    text-decoration: none;
+    transition: opacity 0.15s;
+  }
+
+  .view-all:hover { opacity: 0.7; }
 
   @media (max-width: 640px) {
     .hero { padding: 2.5rem 1rem 2rem; }
