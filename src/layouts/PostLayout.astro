@@ -1,5 +1,6 @@
 ---
 import BaseLayout from './BaseLayout.astro';
+import Comments from '../components/Comments.astro';
 
 interface Props {
   title: string;
@@ -72,6 +73,8 @@ const jsonLd = {
         <a href={`/posts/${nextPost.slug}/`} class="next-link">{nextPost.title} &rarr;</a>
       </div>
     )}
+
+    <Comments />
   </article>
 
 </BaseLayout>

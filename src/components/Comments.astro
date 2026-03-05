@@ -1,0 +1,66 @@
+---
+---
+<section class="comments">
+  <div class="giscus"></div>
+</section>
+
+<script>
+  function initGiscus() {
+    const container = document.querySelector('.giscus');
+    if (!container || container.querySelector('script')) return;
+
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark'
+      ? 'dark_dimmed'
+      : 'light';
+
+    const script = document.createElement('script');
+    script.src = 'https://giscus.app/client.js';
+    script.setAttribute('data-repo', 'khan5v/orekhov.work-blog');
+    script.setAttribute('data-repo-id', 'R_kgDOReNAxw');
+    script.setAttribute('data-category', 'Announcements');
+    script.setAttribute('data-category-id', 'DIC_kwDOReNAx84C3q39');
+    script.setAttribute('data-mapping', 'pathname');
+    script.setAttribute('data-strict', '0');
+    script.setAttribute('data-reactions-enabled', '1');
+    script.setAttribute('data-emit-metadata', '0');
+    script.setAttribute('data-input-position', 'bottom');
+    script.setAttribute('data-theme', theme);
+    script.setAttribute('data-lang', 'en');
+    script.setAttribute('data-loading', 'lazy');
+    script.crossOrigin = 'anonymous';
+    script.async = true;
+    container.appendChild(script);
+
+    // Sync theme changes with Giscus iframe
+    const observer = new MutationObserver(() => {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame');
+      if (iframe) {
+        iframe.contentWindow?.postMessage(
+          { giscus: { setConfig: { theme: isDark ? 'dark_dimmed' : 'light' } } },
+          'https://giscus.app'
+        );
+      }
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme'],
+    });
+  }
+
+  initGiscus();
+  document.addEventListener('astro:after-swap', initGiscus);
+</script>
+
+<style>
+  .comments {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 2rem 1.5rem 3rem;
+  }
+
+  @media (max-width: 640px) {
+    .comments { padding: 1.5rem 1rem 2.5rem; }
+  }
+</style>
