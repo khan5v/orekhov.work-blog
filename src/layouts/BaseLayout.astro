@@ -289,6 +289,20 @@ const isActive = (href: string) =>
 
   .tag:hover { opacity: 0.8; }
 
+  /* --- READING PROGRESS --- */
+  #reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 0%;
+    background: var(--accent);
+    z-index: 9999;
+    transition: width 0.12s ease-out;
+    border-radius: 0 3px 3px 0;
+    box-shadow: 0 0 10px var(--accent);
+  }
+
   /* --- FOOTER --- */
   footer {
     max-width: var(--max-width);

@@ -57,6 +57,7 @@ const breadcrumbLd = {
 };
 ---
 <BaseLayout title={`${title} — orekhov.work`} description={description} ogType="article">
+  <div id="reading-progress" aria-hidden="true"></div>
   <meta property="article:published_time" content={date.toISOString()} slot="head" />
   <meta property="article:author" content="https://orekhov.work/about/" slot="head" />
   <meta property="article:section" content={tags[0]} slot="head" />
@@ -324,4 +325,24 @@ const breadcrumbLd = {
     .article-body pre { padding: 1rem; font-size: 0.75rem; }
     .next-post { padding: 1.5rem 1rem 2.5rem; }
   }
+
 </style>
+
+<script is:inline>
+  function initProgress() {
+    const bar = document.getElementById('reading-progress');
+    if (!bar) return;
+    const update = () => {
+      const articleBody = document.querySelector('.article-body');
+      if (!articleBody) return;
+      const end = articleBody.getBoundingClientRect().bottom + window.scrollY;
+      const total = end - window.innerHeight;
+      const pct = total > 0 ? Math.min(window.scrollY / total * 100, 100) : 0;
+      bar.style.width = pct + '%';
+    };
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  }
+  initProgress();
+  document.addEventListener('astro:page-load', initProgress);
+</script>
