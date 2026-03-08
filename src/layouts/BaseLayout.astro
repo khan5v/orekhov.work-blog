@@ -295,10 +295,12 @@ const isActive = (href: string) =>
     top: 0;
     left: 0;
     height: 3px;
-    width: 0%;
+    width: 100%;
     background: var(--accent);
     z-index: 9999;
-    transition: width 0.12s ease-out;
+    transform: scaleX(0);
+    transform-origin: left;
+    will-change: transform;
     border-radius: 0 3px 3px 0;
     box-shadow: 0 0 10px var(--accent);
   }

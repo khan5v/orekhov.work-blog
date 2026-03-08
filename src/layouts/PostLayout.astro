@@ -337,8 +337,8 @@ const breadcrumbLd = {
       if (!articleBody) return;
       const end = articleBody.getBoundingClientRect().bottom + window.scrollY;
       const total = end - window.innerHeight;
-      const pct = total > 0 ? Math.min(window.scrollY / total * 100, 100) : 0;
-      bar.style.width = pct + '%';
+      const pct = total > 0 ? Math.min(window.scrollY / total, 1) : 0;
+      bar.style.transform = 'scaleX(' + pct + ')';
     };
     window.addEventListener('scroll', update, { passive: true });
     update();
