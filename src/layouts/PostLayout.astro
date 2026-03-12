@@ -7,11 +7,12 @@ interface Props {
   date: Date;
   description: string;
   tags: string[];
+  ogImage?: string;
   readingTime: number;
   nextPost?: { title: string; slug: string };
 }
 
-const { title, date, description, tags, readingTime, nextPost } = Astro.props;
+const { title, date, description, tags, ogImage, readingTime, nextPost } = Astro.props;
 
 const formatted = date.toLocaleDateString('en-US', {
   year: 'numeric',
@@ -21,6 +22,7 @@ const formatted = date.toLocaleDateString('en-US', {
 
 const canonicalURL = Astro.url.href;
 const defaultOgImage = new URL('/og-default.png', Astro.site).href;
+const resolvedOgImage = ogImage ? new URL(ogImage, Astro.site).href : defaultOgImage;
 
 const siteUrl = Astro.site!.href.replace(/\/$/, '');
 
@@ -33,7 +35,7 @@ const jsonLd = {
   dateModified: date.toISOString(),
   url: canonicalURL,
   mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalURL },
-  image: defaultOgImage,
+  image: resolvedOgImage,
   wordCount: readingTime * 250,
   author: {
     '@type': 'Person',
@@ -56,7 +58,7 @@ const breadcrumbLd = {
   ],
 };
 ---
-<BaseLayout title={`${title} — orekhov.work`} description={description} ogType="article">
+<BaseLayout title={`${title} — orekhov.work`} description={description} ogImage={resolvedOgImage} ogType="article">
   <div id="reading-progress" aria-hidden="true"></div>
   <meta property="article:published_time" content={date.toISOString()} slot="head" />
   <meta property="article:author" content="https://orekhov.work/about/" slot="head" />

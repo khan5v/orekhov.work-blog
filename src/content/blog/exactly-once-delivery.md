@@ -3,6 +3,7 @@ title: "Exactly-once semantics on at-least-once infrastructure"
 date: 2026-03-12
 description: "Exactly-once delivery is impossible at the transport layer. The pattern that gives you the semantics anyway: at-least-once delivery plus an idempotent writer."
 tags: ["system design", "distributed systems", "data pipelines"]
+ogImage: "/og-exactly-once.png"
 draft: false
 ---
 

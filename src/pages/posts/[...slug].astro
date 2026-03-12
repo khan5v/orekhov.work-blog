@@ -27,6 +27,7 @@ const readingTime = Math.max(1, Math.ceil(words / 250));
   date={post.data.date}
   description={post.data.description}
   tags={post.data.tags}
+  ogImage={post.data.ogImage}
   readingTime={readingTime}
   nextPost={nextPost.id !== post.id ? { title: nextPost.data.title, slug: nextPost.id } : undefined}
 >
