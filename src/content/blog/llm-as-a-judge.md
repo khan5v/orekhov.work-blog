@@ -2,7 +2,7 @@
 title: "LLM-as-a-judge: how to evaluate AI without fooling yourself"
 date: 2026-03-04
 description: "LLM-as-a-judge from first principles — when to use it, how to design rubrics, the three biases that skew scores, and when to use something simpler."
-tags: ["AI", "system design", "LLM evaluation"]
+tags: ["AI", "system design", "evaluation"]
 draft: false
 ---
 
