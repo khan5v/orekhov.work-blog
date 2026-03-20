@@ -77,6 +77,8 @@ The major observability platforms all address this, though the reasoning behind 
 
 **LangSmith** records token usage on LLM call runs. Their [cost tracking docs](https://docs.langchain.com/langsmith/cost-tracking) describe the trace tree as showing "the total usage for the entire trace, aggregated values for each parent run, and token and cost breakdowns for each child run." The docs don't specify whether parent aggregation is computed at display time or stored, but the architecture clearly separates individual run data from rolled-up totals.
 
+**Braintrust** takes a different approach — they fix the source rather than filtering at consumption. Their [v3.1.0 changelog](https://www.braintrust.dev/docs/changelog) notes a fix for "token double counting between parent and child spans in Vercel AI SDK integration." Their data model supports DAG-structured spans, and aggregation happens at query time via their BTQL language rather than at export time.
+
 The common thread: every platform puts cost and tokens on the actual LLM call, not on the orchestration wrapper. The convention exists. It's just not documented as a rule that instrumentation authors are expected to follow.
 
 ## What I wish the specs said
