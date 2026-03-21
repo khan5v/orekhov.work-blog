@@ -106,4 +106,4 @@ If we want to build reliable agents, we have to stop grading them like tradition
 
 ---
 
-**[Kalibra](https://github.com/khan5v/kalibra)** — regression detection for AI agents · [GitHub](https://github.com/khan5v/kalibra) · [Docs](https://kalibra.cc) · [PyPI](https://pypi.org/project/kalibra/)
+**[Kalibra](https://github.com/khan5v/kalibra)** — regression detection for AI agents · [GitHub](https://github.com/khan5v/kalibra) · [Docs](https://kalibra.cc) · [PyPI](https://pypi.org/project/kalibra/) · [Tutorial notebook](https://colab.research.google.com/github/khan5v/kalibra/blob/main/examples/phoenix_kalibra_tutorial.ipynb)
