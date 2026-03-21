@@ -50,7 +50,7 @@ When conventions are implicit, they get violated. And the violations are silent 
 
 And here's why you can't just detect it after the fact: imagine a parent span with `cost: $0.05` and two children costing `$0.02` and `$0.03`. Is the parent's cost an aggregated subtotal of its children — meaning you should ignore it — or did the parent make its own LLM call that happened to cost `$0.05`? That's not a contrived scenario: an orchestration step that reasons about which tool to call *and then* delegates to children is both an LLM caller and a parent. You can't distinguish "aggregated subtotal" from "coincidentally equal own cost" by looking at the numbers alone.
 
-And this compounds: in a tree of arbitrary depth, you're not double-counting — you're potentially N-counting, with the ambiguity multiplying at every level.
+And this compounds: in a tree of arbitrary height, you're not double-counting — you're potentially N-counting, with the ambiguity multiplying at every level.
 
 ## What to do about it
 
