@@ -3,6 +3,7 @@ title: "When agent trace metrics lie: the span tree double-counting problem"
 date: 2026-03-20
 description: "When agent traces are trees, naive aggregation of cost, tokens, and step counts produces wrong numbers. Here's the problem, what major platforms do about it, and the concrete approaches that work."
 tags: ["AI agents", "observability", "OpenTelemetry", "OpenInference", "evaluation"]
+ogImage: "/og-span-tree-aggregation.png"
 draft: false
 ---
 
