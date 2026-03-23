@@ -3,6 +3,7 @@ title: "Aggregate metrics are a blind spot in agent evaluation"
 date: 2026-03-19
 description: "Why aggregate eval metrics hide AI agent regressions, and how statistical testing catches what aggregates miss."
 tags: ["AI agents", "evaluation", "open source", "testing"]
+ogImage: "/og-kalibra-regression-detection.png"
 draft: false
 ---
 
