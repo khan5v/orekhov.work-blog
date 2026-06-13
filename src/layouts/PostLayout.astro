@@ -71,7 +71,9 @@ const breadcrumbLd = {
     <div class="article-header">
       <div class="label">
         {tags.map((tag, i) => (
-          <a href={`/tags/${tag.toLowerCase().replace(/\s+/g, '-')}/`} class="label-link">{tag}{i < tags.length - 1 ? ' · ' : ''}</a>
+          <>
+            <a href={`/tags/${tag.toLowerCase().replace(/\s+/g, '-')}/`} class="label-link">{tag}</a>{i < tags.length - 1 ? ' · ' : ''}
+          </>
         ))}
       </div>
       <h1>{title}</h1>
